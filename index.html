@@ -352,7 +352,7 @@
   }
   .sched-outer { display: inline-block; min-width: 100%; vertical-align: top; }
 
-  /* Sub-tabs (整合時間表 / 個人流程) */
+  /* Sub-tabs (整合時間表 / 我自己的時間表) */
   .sub-tabs {
     display: flex; flex-shrink: 0;
     background: var(--surface2); border-bottom: 1px solid var(--border);
@@ -369,7 +369,7 @@
   .sub-panel { display: none; flex: 1; overflow: auto; }
   .sub-panel.active { display: block; }
 
-  /* Person sub-tabs (inside 個人流程) */
+  /* Person sub-tabs (inside 我自己的時間表) */
   .person-tabs {
     position: sticky; top: 0; z-index: 15;
     display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px;
@@ -397,7 +397,7 @@
   .tl-person-dot.must { background: var(--must); }
   .tl-person-dot.want { background: rgba(232,134,42,0.9); }
 
-  /* ── 個人流程 — personal timeline (grid) ── */
+  /* ── 我自己的時間表 — personal timeline (grid) ── */
   /* 時間衝突 (overlap): red glow */
   .ptl-conflict-block {
     z-index: 8 !important;
@@ -888,7 +888,7 @@ function renderScheduleDay(day, prefs) {
   // Sub-tab structure
   let html = `<div class="sub-tabs">
     <button class="sub-tab-btn active" onclick="switchSubTab(${day},'integrated',this)">整合時間表</button>
-    <button class="sub-tab-btn" onclick="switchSubTab(${day},'personal',this)">個人流程</button>
+    <button class="sub-tab-btn" onclick="switchSubTab(${day},'personal',this)">我自己的時間表</button>
   </div>`;
 
   html += `<div id="sub-integrated-${day}" class="sub-panel active">${buildIntegratedTimelineHTML(day, prefs)}</div>`;
@@ -967,7 +967,7 @@ function buildIntegratedTimelineHTML(day, prefs) {
   return html;
 }
 
-// ── 個人流程: person sub-tabs + personal timeline ──
+// ── 我自己的時間表: person sub-tabs + personal timeline ──
 function buildPersonFlowHTML(day, prefs, names) {
   if (!names.length) return `<div class="schedule-empty">尚無人填寫喜好</div>`;
 
