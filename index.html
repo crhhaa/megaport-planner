@@ -540,37 +540,6 @@
     .home-content { max-width: 480px; margin: 0 auto; }
   }
 
-  /* ─── Mobile integrated list view ─── */
-  .integrated-desktop-view { display: block; }
-  .integrated-mobile-view  { display: none;  }
-  @media (max-width: 599px) {
-    .integrated-desktop-view { display: none;  }
-    .integrated-mobile-view  { display: block; }
-  }
-  .ml-hour-group {
-    padding: 4px 12px;
-    background: var(--surface2);
-    font-size: 11px; font-weight: 700; color: var(--text2);
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 5;
-    letter-spacing: 0.04em;
-  }
-  .ml-item {
-    display: flex; align-items: center; gap: 8px;
-    padding: 9px 12px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-  }
-  .ml-item.ml-unlit { opacity: 0.38; }
-  .ml-time {
-    font-size: 11px; color: var(--text2); white-space: nowrap;
-    min-width: 76px; font-variant-numeric: tabular-nums; flex-shrink: 0;
-  }
-  .ml-stage-dot {
-    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
-  }
-  .ml-name { flex: 1; font-size: 13px; font-weight: 600; }
-  .ml-persons { display: flex; gap: 3px; flex-wrap: wrap; flex-shrink: 0; }
 </style>
 <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 </head>
@@ -945,42 +914,6 @@ window.switchPersonTab = (day, idx, btn) => {
 };
 
 
-// ── 整合時間表 (手機版): 垂直清單，按時間排序 ──
-function buildMobileIntegratedListHTML(day, prefs) {
-  const dayItems = SCHEDULE.filter(s => s.day === day)
-    .sort((a, b) => timeToMin(a.start) - timeToMin(b.start));
-
-  let html = `<div class="ptl-legend">
-    <span class="ptl-legend-item"><span class="ptl-legend-swatch must"></span>必聽</span>
-    <span class="ptl-legend-item"><span class="ptl-legend-swatch want"></span>想聽</span>
-    <span class="ptl-legend-item"><span class="ptl-legend-swatch dim"></span>無人選擇</span>
-  </div><div>`;
-
-  let lastHour = -1;
-  for (const item of dayItems) {
-    const voters = Object.entries(prefs).filter(([, p]) => p[item.id]);
-    const isLit  = voters.length > 0;
-    const stage  = STAGES.find(s => s.id === item.stage);
-    const hour   = Math.floor(timeToMin(item.start) / 60);
-    if (hour !== lastHour) {
-      html += `<div class="ml-hour-group">${String(hour).padStart(2,'0')}:00</div>`;
-      lastHour = hour;
-    }
-    const personTags = voters.map(([name, p]) => {
-      const cls = p[item.id] === 'must' ? 'must' : 'want';
-      return `<span class="tl-person-dot ${cls}">${esc(name.slice(0,2))}</span>`;
-    }).join('');
-    html += `<div class="ml-item${isLit ? '' : ' ml-unlit'}">
-      <div class="ml-time">${item.start}–${item.end}</div>
-      <div class="ml-stage-dot" style="background:${stage.color}" title="${esc(stage.name)}"></div>
-      <div class="ml-name">${esc(item.artist)}</div>
-      ${isLit ? `<div class="ml-persons">${personTags}</div>` : ''}
-    </div>`;
-  }
-  html += `</div>`;
-  return html;
-}
-
 // ── 整合時間表: ALL blocks shown, unselected = dimmed ──
 function buildIntegratedTimelineHTML(day, prefs) {
   const dayItems = SCHEDULE.filter(s => s.day === day);
@@ -989,9 +922,7 @@ function buildIntegratedTimelineHTML(day, prefs) {
   const totalH   = (topMin - TL_BASE) * TL_SLOT;
   const totalW   = TL_TIME_W + TL_COL_W * STAGES.length;
 
-  let html = `<div class="integrated-mobile-view">${buildMobileIntegratedListHTML(day, prefs)}</div>`;
-  html += `<div class="integrated-desktop-view">`;
-  html += `<div class="ptl-legend">
+  let html = `<div class="ptl-legend">
     <span class="ptl-legend-item"><span class="ptl-legend-swatch must"></span>必聽</span>
     <span class="ptl-legend-item"><span class="ptl-legend-swatch want"></span>想聽</span>
     <span class="ptl-legend-item"><span class="ptl-legend-swatch dim"></span>無人選擇</span>
@@ -1034,7 +965,6 @@ function buildIntegratedTimelineHTML(day, prefs) {
     });
   });
   html += `</div></div>`;
-  html += `</div>`; // close integrated-desktop-view
   return html;
 }
 
