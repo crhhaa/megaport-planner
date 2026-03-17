@@ -459,6 +459,7 @@
   .ptl-legend-bar.tight      { background: rgba(200,160,0,0.2);   border-left-color: #c09000; }
   .ptl-legend-bar.ok         { background: rgba(40,160,80,0.18);  border-left-color: #28a050; }
   .ptl-legend-divider { width: 1px; height: 16px; background: var(--border); flex-shrink: 0; }
+
   .live-dot {
     display: inline-block;
     width: 7px; height: 7px;
@@ -911,6 +912,7 @@ window.switchPersonTab = (day, idx, btn) => {
   panel.querySelectorAll('.person-flow-panel')[idx].classList.add('active');
 };
 
+
 // ── 整合時間表: ALL blocks shown, unselected = dimmed ──
 function buildIntegratedTimelineHTML(day, prefs) {
   const dayItems = SCHEDULE.filter(s => s.day === day);
@@ -1099,11 +1101,14 @@ function buildPersonalTimelineHTML(day, name, prefs) {
         l1 = '⚠ 時間衝突'; l2 = `重疊 ${-gap} 分鐘`;
         
         // ✨ 加上頂部的紅色虛線，營造「從這裡開始被切斷/重疊」的視覺感
-        extraStyle = 'z-index: 10; border-top: 2px dashed #ff2200; box-shadow: 0 -3px 8px rgba(0,0,0,0.08);';
+        extraStyle = 'z-index: 10; border: 2px dashed #ff2200; border-left: 4px solid #ff2200; align-items: flex-end; justify-content: flex-start; text-align: right; padding-right: 6px; padding-top: 4px; text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0 0 6px #ffffff;';
       } else if (isEarlyLeave) {
         // Gap exists but not enough to travel
         bg = 'rgba(255,136,0,0.15)'; borderLeft = '4px solid #ff8800';
         l1 = '⚠ 要早走'; l2 = `需 ${travel} 分，只有 ${gap} 分`;
+        
+        // ✨ 加上靠右對齊 (flex-end / flex-start) 與白色的文字光暈 (text-shadow)
+        extraStyle = 'align-items: flex-end; justify-content: flex-start; text-align: right; padding-right: 6px; padding-top: 4px; text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0 0 6px #ffffff;';
       } else if (sameStage) {
         bg = 'rgba(200,200,220,0.85)'; borderLeft = `4px solid ${color}`;
         l1 = '同場地'; l2 = `休息 ${rest} 分`;
