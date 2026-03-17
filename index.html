@@ -16,6 +16,8 @@
     --accent: #e83c6c;
     --must: #e83c6c;
     --want: #e8862a;
+    --must_self: #780dad;
+    --want_self: #d3a9f1;
     --tab-active: #e83c6c;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -446,9 +448,11 @@
     display: inline-block; width: 11px; height: 11px;
     border-radius: 2px; flex-shrink: 0;
   }
-  .ptl-legend-swatch.must { background: var(--must); }
-  .ptl-legend-swatch.want { background: var(--want); }
-  .ptl-legend-swatch.dim  { background: rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.12); }
+  .ptl-legend-swatch.must      { background: var(--must); }
+  .ptl-legend-swatch.want      { background: var(--want); }
+  .ptl-legend-swatch.must_self { background: var(--must_self); }
+  .ptl-legend-swatch.want_self { background: var(--want_self); }
+  .ptl-legend-swatch.dim       { background: rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.12); }
   .ptl-legend-bar {
     display: inline-block; width: 20px; height: 11px;
     border-radius: 2px; border-left: 3px solid; flex-shrink: 0;
@@ -1020,8 +1024,8 @@ function buildPersonalTimelineHTML(day, name, prefs) {
   });
 
   const LEGEND_PERSONAL = `<div class="ptl-legend">
-    <span class="ptl-legend-item"><span class="ptl-legend-swatch must"></span>必聽（深色）</span>
-    <span class="ptl-legend-item"><span class="ptl-legend-swatch want"></span>想聽（淡色）</span>
+    <span class="ptl-legend-item"><span class="ptl-legend-swatch must_self"></span>必聽（深色）</span>
+    <span class="ptl-legend-item"><span class="ptl-legend-swatch want_self"></span>想聽（淡色）</span>
     <span class="ptl-legend-divider"></span>
     <span class="ptl-legend-item"><span class="ptl-legend-bar conflict"></span>時間衝突</span>
     <span class="ptl-legend-item"><span class="ptl-legend-bar earlyleave"></span>要早走</span>
