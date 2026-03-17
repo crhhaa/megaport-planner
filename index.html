@@ -581,8 +581,8 @@
 <div id="page-select" class="page">
   <div class="header">
     <div>
-      <div style="font-size:18px;font-weight:700;color:#e83c6c;">選擇喜好</div>
-      <div class="header-sub" id="select-subtitle">選擇你想聽的樂團</div>
+      <div style="font-size:18px;font-weight:700;color:#e83c6c;">選擇想聽的！</div>
+      <div class="header-sub" id="select-subtitle">選擇你想聽的團</div>
     </div>
     <button class="back-btn" onclick="goHome()">← 返回</button>
   </div>
@@ -887,8 +887,8 @@ function renderScheduleDay(day, prefs) {
 
   // Sub-tab structure
   let html = `<div class="sub-tabs">
-    <button class="sub-tab-btn active" onclick="switchSubTab(${day},'integrated',this)">整合時間表</button>
-    <button class="sub-tab-btn" onclick="switchSubTab(${day},'personal',this)">我自己的時間表</button>
+    <button class="sub-tab-btn active" onclick="switchSubTab(${day},'integrated',this)">大家ㄉ時間表</button>
+    <button class="sub-tab-btn" onclick="switchSubTab(${day},'personal',this)">我自己ㄉ時間表</button>
   </div>`;
 
   html += `<div id="sub-integrated-${day}" class="sub-panel active">${buildIntegratedTimelineHTML(day, prefs)}</div>`;
