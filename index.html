@@ -539,7 +539,6 @@
     .schedule-day-panel { max-width: 1200px; margin: 0 auto; }
     .home-content { max-width: 480px; margin: 0 auto; }
   }
-
 </style>
 <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 </head>
@@ -999,10 +998,7 @@ function buildPersonalTimelineHTML(day, name, prefs) {
   // Only show columns for stages this person selected — keeps grid compact
   const myStageIds = [...new Set(myShows.map(s => s.stage))];
   const myStages   = STAGES.filter(s => myStageIds.includes(s.id));
-  const DESKTOP_W    = TL_TIME_W + TL_COL_W * STAGES.length;
-  const INTEGRATED_W = window.innerWidth < 600
-    ? Math.max(window.innerWidth - 16, TL_TIME_W + 50 * myStages.length)
-    : DESKTOP_W;
+  const INTEGRATED_W = TL_TIME_W + TL_COL_W * STAGES.length; // same as integrated view
   const PTL_COL_W  = Math.floor((INTEGRATED_W - TL_TIME_W) / myStages.length);
 
   const allMins = dayItems.flatMap(s => [timeToMin(s.start), timeToMin(s.end)]);
