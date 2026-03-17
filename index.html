@@ -947,8 +947,8 @@ function buildIntegratedTimelineHTML(day, prefs) {
       const top     = (timeToMin(item.start) - TL_BASE) * TL_SLOT;
       const height  = (timeToMin(item.end) - timeToMin(item.start)) * TL_SLOT;
       const isLit   = voters.length > 0;
-      const bg = isLit ? stage.color : 'rgba(255,255,255,0.04)';
-      const border  = isLit ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.07)';
+      const bg = isLit ? stage.color : 'rgba(0,0,0,0.06)';
+      const border  = isLit ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.12)';
       const personTags = voters.map(([name, p]) => {
         const cls = p[item.id] === 'must' ? 'must' : 'want';
         return `<span class="tl-person-dot ${cls}">${esc(name.slice(0,2))}</span>`;
@@ -957,7 +957,7 @@ function buildIntegratedTimelineHTML(day, prefs) {
         style="left:${left+1}px;top:${top+1}px;width:${TL_COL_W-2}px;height:${height-2}px;background:${bg};border-color:${border}"
         title="${esc(item.artist)}\n${item.start}–${item.end}${voters.length?'\n'+voters.map(([n,p])=>n+':'+p[item.id]).join(', '):''}">
         <div class="tl-block-inner">
-          <div class="tl-block-name" style="${isLit?'':'color:rgba(255,255,255,0.2)'}">${esc(item.artist)}</div>
+          <div class="tl-block-name" style="${isLit?'':'color:rgba(26,26,46,0.35)'}">${esc(item.artist)}</div>
           ${isLit ? `<div class="tl-block-persons">${personTags}</div>` : ''}
         </div>
       </div>`;
