@@ -427,12 +427,12 @@
   .ptl-travel-l1 {
     font-size: 10px; font-weight: 800;
     color: #1a1a2e; line-height: 1.2;
-    word-break: break-word;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .ptl-travel-l2 {
     font-size: 9px; font-weight: 600;
     color: rgba(26,26,46,0.75); line-height: 1.2;
-    word-break: break-word;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   /* Legend bar (shared between integrated + personal) */
   .ptl-legend {
@@ -536,8 +536,8 @@
 
   /* ─── Responsive ─── */
   @media (min-width: 600px) {
-    .schedule-day-panel { max-width: 1000px; margin: 0 auto; }
-    .home-content { max-width: 480px; margin: 0 auto; }
+    .schedule-day-panel { max-width: 1200px; margin: 0 auto; }
+    .home-content { max-width: 600px; margin: 0 auto; }
   }
 </style>
 <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
@@ -998,13 +998,14 @@ function buildPersonalTimelineHTML(day, name, prefs) {
   // Only show columns for stages this person selected — keeps grid compact
   const myStageIds = [...new Set(myShows.map(s => s.stage))];
   const myStages   = STAGES.filter(s => myStageIds.includes(s.id));
-  const INTEGRATED_W = TL_TIME_W + TL_COL_W * STAGES.length; // same as integrated view
-  const PTL_COL_W  = Math.floor((INTEGRATED_W - TL_TIME_W) / myStages.length);
+  const INTEGRATED_W = TL_TIME_W + TL_COL_W * STAGES.length;
+  const PTL_COL_W  = Math.floor((INTEGRATED_W - TL_TIME_W) / myStages.length * 0.75);
+  const PTL_SLOT   = 1.5; // px per minute — slightly more compact than integrated view
 
   const allMins = dayItems.flatMap(s => [timeToMin(s.start), timeToMin(s.end)]);
   const topMin  = Math.max(...allMins);
-  const totalH  = (topMin - TL_BASE) * TL_SLOT;
-  const totalW  = INTEGRATED_W;
+  const totalH  = (topMin - TL_BASE) * PTL_SLOT;
+  const totalW  = TL_TIME_W + PTL_COL_W * myStages.length;
 
   // Pre-compute transitions
   const trans = myShows.map((item, idx) => {
@@ -1039,7 +1040,7 @@ function buildPersonalTimelineHTML(day, name, prefs) {
 
   // Gridlines
   for (let m = TL_BASE; m <= topMin; m += 30) {
-    const top = (m - TL_BASE) * TL_SLOT, isHour = m % 60 === 0;
+    const top = (m - TL_BASE) * PTL_SLOT, isHour = m % 60 === 0;
     const label = `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
     html += `<div class="tl-gridline${isHour?' hour':''}" style="top:${top}px;left:${TL_TIME_W}px"></div>`;
     html += `<div class="tl-time-label" style="top:${top}px">${label}</div>`;
@@ -1048,8 +1049,8 @@ function buildPersonalTimelineHTML(day, name, prefs) {
   myShows.forEach((item, idx) => {
     const si     = myStages.findIndex(s => s.id === item.stage);
     const left   = TL_TIME_W + si * PTL_COL_W;
-    const top    = (timeToMin(item.start) - TL_BASE) * TL_SLOT;
-    const height = (timeToMin(item.end) - timeToMin(item.start)) * TL_SLOT;
+    const top    = (timeToMin(item.start) - TL_BASE) * PTL_SLOT;
+    const height = (timeToMin(item.end) - timeToMin(item.start)) * PTL_SLOT;
     const pref   = p[item.id];
     const color  = stageColor(item.stage);
     const tOut   = trans[idx];
@@ -1083,16 +1084,16 @@ function buildPersonalTimelineHTML(day, name, prefs) {
     // Travel indicator below this show
     if (tOut) {
       const { gap, travel, rest, next, isRealConflict, isEarlyLeave } = tOut;
-      let travelTop = (timeToMin(item.end) - TL_BASE) * TL_SLOT;
-      let travelH   = Math.max(travel * TL_SLOT, 36);
+      let travelTop = (timeToMin(item.end) - TL_BASE) * PTL_SLOT;
+      let travelH   = Math.max(travel * PTL_SLOT, 36);
       const nextSn    = stageName(next.stage);
       const sameStage = item.stage === next.stage;
       let extraStyle  = ""; // 新增一個變數來存放衝突時需要的額外 CSS 屬性
 
       let bg, borderLeft, l1, l2;
       if (isRealConflict) {// Shows actually overlap in time
-        travelTop = (timeToMin(next.start) - TL_BASE) * TL_SLOT;
-        travelH = (-gap) * TL_SLOT;
+        travelTop = (timeToMin(next.start) - TL_BASE) * PTL_SLOT;
+        travelH = (-gap) * PTL_SLOT;
         if (travelH < 36) travelH = 36;
         
         // ✨ 改用「近乎純白/微紅」的實心底色（0.96 不透明度），直接把下方的顏色蓋掉
