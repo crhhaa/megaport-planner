@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大港開唱 2026 行程規劃</title>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+<style>
+  :root {
+    --bg: #f4f4f8;
+    --surface: #ffffff;
+    --surface2: #eeeef4;
+    --border: #d0d0de;
+    --text: #1a1a2e;
+    --text2: #666688;
+    --accent: #e83c6c;
+    --must: #e83c6c;
+    --want: #e8862a;
+    --tab-active: #e83c6c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
+    min-height: 100vh;
+    font-size: 15px;
+  }
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: flex; flex-direction: column; }
+
+  /* ─── Header ─── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header h1 { font-size: 18px; font-weight: 700; color: var(--accent); }
+  .header-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .back-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .back-btn:hover { border-color: var(--accent); }
+
+  /* ─── Home page ─── */
+  .home-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    gap: 24px;
+  }
+  .home-logo {
+    font-size: 48px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .home-title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--accent);
+  }
+  .home-subtitle {
+    font-size: 14px;
+    color: var(--text2);
+    text-align: center;
+  }
+  .name-section {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .name-section label { font-size: 14px; color: var(--text2); }
+  .name-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 16px;
+    width: 100%;
+    outline: none;
+  }
+  .name-input:focus { border-color: var(--accent); }
+  .name-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .name-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .name-chip:hover { border-color: var(--accent); color: var(--text); }
+  .participants-info {
+    font-size: 13px;
+    color: var(--text2);
+    text-align: center;
+  }
+  .participants-info strong { color: var(--text); }
+  .btn {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    text-align: center;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-secondary {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn:hover { opacity: 0.88; }
+
+  /* ─── Tabs ─── */
+  .tabs {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 57px; z-index: 90;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    color: var(--text2);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .tab-btn.active {
+    color: var(--tab-active);
+    border-bottom-color: var(--tab-active);
+  }
+
+  /* ─── Select page — stage list ─── */
+  .select-content { flex: 1; overflow-y: auto; }
+  .day-panel { display: none; }
+  .day-panel.active { display: block; }
+
+  .stage-section { }
+  .stage-section-hdr {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 12px;
+    font-size: 12px; font-weight: 700; color: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+  }
+  .stage-item {
+    display: flex; align-items: center;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    gap: 8px;
+  }
+  .stage-item.sel-must { background: rgba(232,60,108,0.1); }
+  .stage-item.sel-want { background: rgba(232,134,42,0.08); }
+  .item-time { font-size: 11px; color: var(--text2); white-space: nowrap; min-width: 84px; }
+  .item-name { flex: 1; font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .item-actions { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .spotify-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px;
+    background: #1DB954; border-radius: 50%;
+    color: #fff; text-decoration: none; font-size: 13px; flex-shrink: 0;
+    transition: opacity 0.15s;
+  }
+  .spotify-btn:hover { opacity: 0.8; }
+  .pref-btn {
+    padding: 4px 8px; border-radius: 6px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--text2); font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .pref-btn.must-active { background: var(--must); border-color: var(--must); color: #fff; }
+  .pref-btn.want-active { background: var(--want); border-color: var(--want); color: #fff; }
+
+  /* ─── Schedule + Select shared: timeline scroll area ─── */
+  .tl-scroll { overflow: auto; flex: 1; }
+  .tl-wrap { display: inline-block; min-width: 100%; }
+
+  /* Stage header row */
+  .tl-header-row {
+    display: flex;
+    position: sticky; top: 0; z-index: 20;
+    background: var(--bg);
+    border-bottom: 2px solid var(--border);
+  }
+  .tl-time-th {
+    flex-shrink: 0;
+    width: 42px;
+    background: var(--bg);
+  }
+  .tl-col-header {
+    flex-shrink: 0;
+    width: 68px;
+    padding: 5px 2px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    line-height: 1.3;
+    border-left: 1px solid rgba(0,0,0,0.2);
+  }
+
+  /* Timeline body */
+  .tl-body { position: relative; }
+  .tl-gridline {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: rgba(0,0,0,0.06);
+    pointer-events: none;
+  }
+  .tl-gridline.hour { background: rgba(0,0,0,0.12); }
+  .tl-time-label {
+    position: absolute;
+    left: 0;
+    width: 40px;
+    font-size: 9px;
+    color: var(--text2);
+    text-align: right;
+    padding-right: 4px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Artist block */
+  .tl-block {
+    position: absolute;
+    cursor: pointer;
+    border-radius: 3px;
+    overflow: hidden;
+/* 將原本的 border: 1px solid rgba(0,0,0,0.25); 改成下面這樣： */
+    border: none;
+    transition: filter 0.1s, outline 0.1s;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .tl-block:active { filter: brightness(1.3); }
+  .tl-block.tl-must {
+      /* 把 outline 拿掉，這裡我幫你保留了原本的 box-shadow 讓它還有一點淡淡的光暈，若不喜歡也可以一併刪除 */
+      box-shadow: 0 0 7px rgba(232,60,108,0.45);
+      z-index: 5;
+    }
+    /* 想聽: same stage color but darkened overlay so it recedes visually */
+    .tl-block.tl-want {
+      /* 同樣把 outline 拿掉 */
+      z-index: 4;
+    }
+  .tl-block.tl-want::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(244,244,248,0.65);
+    pointer-events: none; z-index: 6;
+  }
+  /* text/badges sit above the overlay */
+  .tl-block.tl-want .tl-block-inner { position: relative; z-index: 7; }
+  /* conflict/earlyleave blocks: overlay kept so want blocks remain semi-transparent */
+  /* Muted travel indicator for non must→must transitions */
+  .ptl-travel.ptl-muted { opacity: 0.4; }
+  .tl-block-inner {
+    width: 100%; height: 100%;
+    padding: 2px 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+  .tl-block-name {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.95);
+    line-height: 1.25;
+    word-break: break-all;
+  }
+  .tl-badge {
+    display: inline-block;
+    font-size: 8px;
+    font-weight: 800;
+    color: #fff;
+    border-radius: 2px;
+    padding: 1px 3px;
+    margin-top: 2px;
+    align-self: flex-start;
+  }
+  .tl-badge.must { background: var(--must); }
+  .tl-badge.want { background: var(--want); }
+
+  /* Legend hint */
+  .tl-legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: var(--text2);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .tl-legend span { display: flex; align-items: center; gap: 4px; }
+
+  .stage-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    margin-right: 4px;
+  }
+
+  /* ─── Schedule page — two-level tab structure ─── */
+  .schedule-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+  .schedule-day-panel { display: none; }
+  .schedule-day-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+  .schedule-empty {
+    text-align: center; color: var(--text2); padding: 60px 20px; font-size: 14px;
+  }
+  .sched-outer { display: inline-block; min-width: 100%; vertical-align: top; }
+
+  /* Sub-tabs (整合時間表 / 個人流程) */
+  .sub-tabs {
+    display: flex; flex-shrink: 0;
+    background: var(--surface2); border-bottom: 1px solid var(--border);
+    padding: 0 12px; gap: 2px;
+  }
+  .sub-tab-btn {
+    padding: 8px 16px; border: none; background: transparent;
+    color: var(--text2); font-size: 13px; font-weight: 600;
+    cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s;
+  }
+  .sub-tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
+
+  /* Sub-panels */
+  .sub-panel { display: none; flex: 1; overflow: auto; }
+  .sub-panel.active { display: block; }
+
+  /* Person sub-tabs (inside 個人流程) */
+  .person-tabs {
+    position: sticky; top: 0; z-index: 15;
+    display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px;
+    padding: 8px 12px; background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  .person-tabs::-webkit-scrollbar { display: none; }
+  .person-tab-btn {
+    padding: 4px 14px; border: 1px solid var(--border); background: transparent;
+    color: var(--text2); font-size: 12px; font-weight: 600;
+    cursor: pointer; border-radius: 20px; white-space: nowrap; transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .person-tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .person-flow-panel { display: none; }
+  .person-flow-panel.active { display: block; }
+
+  /* Person tags inside integrated timeline blocks */
+  .tl-block-persons { display: flex; flex-wrap: wrap; gap: 1px; margin-top: 2px; }
+  .tl-person-dot {
+    font-size: 7px; font-weight: 700; color: #fff;
+    background: rgba(0,0,0,0.45); border-radius: 2px; padding: 1px 2px; line-height: 1.3;
+  }
+  .tl-person-dot.must { background: var(--must); }
+  .tl-person-dot.want { background: rgba(232,134,42,0.9); }
+
+  /* ── 個人流程 — personal timeline (grid) ── */
+  /* 時間衝突 (overlap): red glow */
+  .ptl-conflict-block {
+    z-index: 8 !important;
+  }
+  .ptl-conflict-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 6px; z-index: 9;
+    background: repeating-linear-gradient(90deg,
+      #ff2200 0,#ff2200 7px, #ffcc00 7px, #ffcc00 14px);
+  }
+  /* 要早走 (gap < travel): amber glow */
+  .ptl-earlyleave-block {
+    z-index: 7 !important;
+  }
+  .ptl-earlyleave-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 6px; z-index: 9;
+    background: repeating-linear-gradient(90deg,
+      #ff8800 0,#ff8800 7px, #ffe066 7px, #ffe066 14px);
+  }
+  /* Travel indicator bar — shown below each show in its column */
+  .ptl-travel {
+    position: absolute; z-index: 4;
+    border-radius: 0 0 4px 4px;
+    padding: 3px 5px;
+    display: flex; flex-direction: column; justify-content: flex-start; gap: 1px;
+    pointer-events: none; overflow: hidden;
+  }
+  .ptl-travel-l1 {
+    font-size: 10px; font-weight: 800;
+    color: #1a1a2e; line-height: 1.2;
+    word-break: break-word;
+  }
+  .ptl-travel-l2 {
+    font-size: 9px; font-weight: 600;
+    color: rgba(26,26,46,0.75); line-height: 1.2;
+    word-break: break-word;
+  }
+  /* Legend bar (shared between integrated + personal) */
+  .ptl-legend {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+    padding: 7px 12px;
+    background: var(--surface2); border-bottom: 1px solid var(--border);
+    font-size: 11px; color: var(--text2); flex-shrink: 0;
+  }
+  .ptl-legend-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .ptl-legend-swatch {
+    display: inline-block; width: 11px; height: 11px;
+    border-radius: 2px; flex-shrink: 0;
+  }
+  .ptl-legend-swatch.must { background: #7B3FA0; } /* example stage color, full brightness */
+  .ptl-legend-swatch.want { background: rgba(123,63,160,0.25); border: 1px solid rgba(123,63,160,0.4); } /* same, dimmed */
+  .ptl-legend-swatch.dim  { background: rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.12); }
+  .ptl-legend-bar {
+    display: inline-block; width: 20px; height: 11px;
+    border-radius: 2px; border-left: 3px solid; flex-shrink: 0;
+  }
+  .ptl-legend-bar.conflict   { background: rgba(255,34,0,0.15);   border-left-color: #ff2200; }
+  .ptl-legend-bar.earlyleave { background: rgba(255,136,0,0.15);  border-left-color: #ff8800; }
+  .ptl-legend-bar.zero       { background: rgba(255,136,0,0.2);   border-left-color: #ff8800; }
+  .ptl-legend-bar.tight      { background: rgba(200,160,0,0.2);   border-left-color: #c09000; }
+  .ptl-legend-bar.ok         { background: rgba(40,160,80,0.18);  border-left-color: #28a050; }
+  .ptl-legend-divider { width: 1px; height: 16px; background: var(--border); flex-shrink: 0; }
+  .live-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #44dd88;
+    animation: blink 1.5s infinite;
+    margin-right: 4px;
+  }
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .schedule-header-info {
+    padding: 10px 14px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .persons-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-left: 8px;
+  }
+  .person-pill {
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+
+  /* ─── Firebase config notice ─── */
+  .config-notice {
+    background: rgba(232,60,108,0.12);
+    border: 1px solid rgba(232,60,108,0.4);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #b01050;
+    max-width: 360px;
+    width: 100%;
+  }
+  .config-notice code {
+    background: rgba(0,0,0,0.08);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  /* ─── Toast ─── */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #333;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    opacity: 0;
+    transition: all 0.25s;
+    pointer-events: none;
+    z-index: 9999;
+    white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ─── Responsive ─── */
+  @media (min-width: 600px) {
+    .schedule-day-panel { max-width: 1200px; margin: 0 auto; }
+    .home-content { max-width: 480px; margin: 0 auto; }
+  }
+</style>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     PAGE 1: HOME
+══════════════════════════════════════ -->
+<div id="page-home" class="page active">
+  <div class="header">
+    <div>
+      <div class="header h1" style="font-size:18px;font-weight:700;color:#e83c6c;">大港開唱 2026</div>
+      <div class="header-sub" style="text-align: center;">行程規劃系統</div>
+    </div>
+  </div>
+  <div class="home-content">
+    <div class="home-logo">🎸</div>
+    <div class="home-title">大港開唱 2026<br>行程規劃</div>
+    <div class="home-subtitle">多人即時協作 · 合併行程 · 衝突提示</div>
+
+    <div id="firebase-notice" class="config-notice" style="display:none;">
+      ⚠️ 請先設定 Firebase：找到 <code>FIREBASE_CONFIG</code> 並填入你的專案設定。
+    </div>
+
+    <div class="name-section">
+      <label>你的名字</label>
+      <input id="name-input" class="name-input" type="text" placeholder="輸入名字..." maxlength="20" autocomplete="off">
+      <div id="name-chips" class="name-chips"></div>
+      <div id="participants-info" class="participants-info">載入中...</div>
+    </div>
+
+    <button class="btn btn-primary" onclick="goToSelect()">填寫我的喜好</button>
+    <button class="btn btn-secondary" onclick="goToSchedule()">查看合併行程表</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 2: SELECT
+══════════════════════════════════════ -->
+<div id="page-select" class="page">
+  <div class="header">
+    <div>
+      <div style="font-size:18px;font-weight:700;color:#e83c6c;">選擇喜好</div>
+      <div class="header-sub" id="select-subtitle">選擇你想聽的樂團</div>
+    </div>
+    <button class="back-btn" onclick="goHome()">← 返回</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchSelectDay(1, this)">Day 1 (3/21)</button>
+    <button class="tab-btn" onclick="switchSelectDay(2, this)">Day 2 (3/22)</button>
+  </div>
+  <div class="select-content">
+    <div id="select-day1" class="day-panel active"></div>
+    <div id="select-day2" class="day-panel"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 3: SCHEDULE
+══════════════════════════════════════ -->
+<div id="page-schedule" class="page">
+  <div class="header">
+    <div>
+      <div style="font-size:18px;font-weight:700;color:#e83c6c;">合併行程表</div>
+      <div class="header-sub">
+        <span class="live-dot"></span>即時同步
+      </div>
+    </div>
+    <button class="back-btn" onclick="goHome()">← 返回</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchSchedDay(1, this)">Day 1 (3/21)</button>
+    <button class="tab-btn" onclick="switchSchedDay(2, this)">Day 2 (3/22)</button>
+  </div>
+  <div class="schedule-header-info">
+    <span class="live-dot"></span>
+    <span>已填寫：</span>
+    <div id="schedule-persons" class="persons-list"></div>
+  </div>
+  <div class="schedule-content">
+    <div id="schedule-day1" class="schedule-day-panel active"></div>
+    <div id="schedule-day2" class="schedule-day-panel"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+// ══════════════════════════════════════
+// FIREBASE CONFIG — 請填入你的 Firebase 設定
+// ══════════════════════════════════════
+// const FIREBASE_CONFIG = {
+//   apiKey: "YOUR_API_KEY",
+//   authDomain: "YOUR_PROJECT.firebaseapp.com",
+//   databaseURL: "https://YOUR_PROJECT-default-rtdb.asia-southeast1.firebasedatabase.app",
+//   projectId: "YOUR_PROJECT",
+//   storageBucket: "YOUR_PROJECT.appspot.com",
+//   messagingSenderId: "YOUR_SENDER_ID",
+//   appId: "YOUR_APP_ID"
+// };
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyD579fVzqd86woweTC2Gu56NDB3KswcoVY",
+  authDomain: "megaport-planner.firebaseapp.com",
+  projectId: "megaport-planner",
+  storageBucket: "megaport-planner.firebasestorage.app",
+  messagingSenderId: "505477066378",
+  databaseURL: "https://megaport-planner-default-rtdb.firebaseio.com",
+  appId: "1:505477066378:web:2d5f02d28ba6e2396d8773",
+  measurementId: "G-HNKGF03ST1"
+};
+
+// ══════════════════════════════════════
+// SCHEDULE DATA (embedded)
+// ══════════════════════════════════════
+const SCHEDULE = [{"id":"d1-001","artist":"椅子樂團","stage":"nanba","day":1,"start":"12:30","end":"13:10","spotifyId":"4IlxI05VmVDx8ShdgKEnLK"},{"id":"d1-002","artist":"The Birthday [JP]","stage":"nanba","day":1,"start":"14:10","end":"14:50","spotifyId":"58zME34zPsQx58YXCyFryH"},{"id":"d1-003","artist":"Aooo [JP]","stage":"nanba","day":1,"start":"15:50","end":"16:30","spotifyId":"2Tz9q3iKdePddG0s46E9X2"},{"id":"d1-004","artist":"滅火器","stage":"nanba","day":1,"start":"17:30","end":"18:10","spotifyId":"7qBIgabdHdcr6NLujDxWAU"},{"id":"d1-005","artist":"milet [JP]","stage":"nanba","day":1,"start":"19:10","end":"19:50","spotifyId":"45ft4DyTCEJfQwTBHXpdhM"},{"id":"d1-007","artist":"血肉果汁機 ft. 陳亞蘭","stage":"nanba","day":1,"start":"21:10","end":"21:50","spotifyId":"78ltY2tUrZpkWJ9CWYGZfl"},{"id":"d1-010","artist":"NEE [JP]","stage":"hailong","day":1,"start":"13:10","end":"13:50","spotifyId":"1gh7KnvnbRnc1gXEPuV8KH"},{"id":"d1-012","artist":"joOji [JP]","stage":"hailong","day":1,"start":"14:40","end":"15:20","spotifyId":"5Wfhi0FggHCfOSa3ux39fk"},{"id":"d1-014","artist":"黑狼人肉戰車那卡西","stage":"hailong","day":1,"start":"16:00","end":"16:40"},{"id":"d1-016","artist":"AVRALIZE [DE]","stage":"hailong","day":1,"start":"17:20","end":"18:00","spotifyId":"6h9Yjv46RWsgt2NQ1F6Jb5"},{"id":"d1-018","artist":"無妄合作社","stage":"hailong","day":1,"start":"18:40","end":"19:20","spotifyId":"6py5j29igdKEvG75sZpTbW"},{"id":"d1-006","artist":"Käärijä [FI]","stage":"hailong","day":1,"start":"20:10","end":"21:00","spotifyId":"6LkMGN0t3HDNL8hIvma70r"},{"id":"d1-030","artist":"海豚刑警","stage":"nvshen","day":1,"start":"12:30","end":"13:10","spotifyId":"5F14oggNO5Nvl08UsULzaT"},{"id":"d1-011","artist":"漂流出口","stage":"nvshen","day":1,"start":"13:50","end":"14:30","spotifyId":"2MTlHJpV27LEGE9HYVBGxy"},{"id":"d1-013","artist":"南瓜妮歌迷俱樂部","stage":"nvshen","day":1,"start":"15:10","end":"15:50","spotifyId":"0bOeyvNd7Y87TJ15SH2HnS"},{"id":"d1-015","artist":"the band apart [JP]","stage":"nvshen","day":1,"start":"16:40","end":"17:20","spotifyId":"6g7JH6zxP3JTfg7i8bZwbf"},{"id":"d1-017","artist":"same Sam but different. 鄭敬儒｜山姆｜楊世暄","stage":"nvshen","day":1,"start":"18:00","end":"18:40"},{"id":"d1-019","artist":"李竺芯 ft. 妮妃雅·瘋","stage":"nvshen","day":1,"start":"19:30","end":"20:10","spotifyId":"0qI7jcxX3CFiafnkAe7Rjp"},{"id":"d1-021","artist":"謝金燕","stage":"nvshen","day":1,"start":"21:00","end":"21:40","spotifyId":"7J59BD03maCvbOJKBlryQK"},{"id":"d1-031","artist":"倒車入庫","stage":"haibo","day":1,"start":"13:10","end":"13:50","spotifyId":"5dnOo3EpTCmEnLwoC4tP78"},{"id":"d1-032","artist":"DSPS","stage":"haibo","day":1,"start":"14:30","end":"15:10","spotifyId":"4EJY7H6gmi3nXtTvt2ddD7"},{"id":"d1-033","artist":"Yokkorio","stage":"haibo","day":1,"start":"15:50","end":"16:30","spotifyId":"5yGZhAsU9EHqFszyq19jXg"},{"id":"d1-035","artist":"Mong Tong × XTRUX","stage":"haibo","day":1,"start":"17:10","end":"17:50","spotifyId":"61QVaGjYK4UNd6uTz7Lzuo"},{"id":"d1-037","artist":"體熊專科。Major in Body Bear","stage":"haibo","day":1,"start":"18:40","end":"19:20","spotifyId":"6XJMXBBFw2cpcFhytyv5Q4"},{"id":"d1-020","artist":"宅邦戰隊OTAKUNI學園祭","stage":"haibo","day":1,"start":"20:10","end":"21:40"},{"id":"d1-040","artist":"COLD DEW","stage":"kamome","day":1,"start":"13:10","end":"13:50","spotifyId":"1wK8TaYMCje9VRs0y1R8b7"},{"id":"d1-042","artist":"Yappy","stage":"kamome","day":1,"start":"14:50","end":"15:30","spotifyId":"28G5rtbvCmWsjyp5G6LwMe"},{"id":"d1-034","artist":"馬克","stage":"kamome","day":1,"start":"16:30","end":"17:10","spotifyId":"0N7qBbcs5Ij44dxbAKy2Sl"},{"id":"d1-036","artist":"P!SCO","stage":"kamome","day":1,"start":"18:10","end":"18:50","spotifyId":"5ucZzHHKydsmjyZJT9vOWe"},{"id":"d1-038","artist":"Manic Sheep","stage":"kamome","day":1,"start":"19:50","end":"20:30","spotifyId":"6JXdjqMVpq61fvihemTbfI"},{"id":"d1-041","artist":"MoonD'shake","stage":"chutou","day":1,"start":"13:40","end":"14:20","spotifyId":"4SJCiABYv6wZlnDJMfKLER"},{"id":"d1-050","artist":"LAWA ft. Angie安吉","stage":"chutou","day":1,"start":"15:00","end":"15:40","spotifyId":"6YRem17JxNaJkYGXm13ElV"},{"id":"d1-051","artist":"憂憂 ft. 奕碩","stage":"chutou","day":1,"start":"16:20","end":"17:00"},{"id":"d1-052","artist":"陳以恆","stage":"chutou","day":1,"start":"17:40","end":"18:20","spotifyId":"26ptiw0RrtrYZcRPPGHj5G"},{"id":"d1-060","artist":"寫下你對這場派對的心得 何勁旻｜陳冠哼","stage":"daxiong","day":1,"start":"13:00","end":"14:00"},{"id":"d1-062","artist":"憑光頭入場可換啤酒一瓶 光頭火鳥｜光頭美麗｜光頭珞亦","stage":"daxiong","day":1,"start":"15:00","end":"16:00"},{"id":"d1-063","artist":"你也貢獻難聽 曾國宏｜許正泰","stage":"daxiong","day":1,"start":"17:00","end":"18:00"},{"id":"d1-071","artist":"黃雨晴","stage":"lanbaoshi","day":1,"start":"14:00","end":"14:40","spotifyId":"2Peqh4pXySabABIVbVbKZf"},{"id":"d1-073","artist":"昭霖＆甜吻吻","stage":"lanbaoshi","day":1,"start":"15:20","end":"16:00","spotifyId":"6QG7iU3HlpXfClUyquYIj3"},{"id":"d1-075","artist":"BBFFMF","stage":"lanbaoshi","day":1,"start":"16:40","end":"17:20","spotifyId":"5O8J8WassRWJWfg6WDK1Ox"},{"id":"d1-064","artist":"美麗本人 ft. 異鄉人","stage":"lanbaoshi","day":1,"start":"18:00","end":"18:40","spotifyId":"2EqCLoWLxNjPIBQLRtNRE9"},{"id":"d1-065","artist":"大象體操 比夢境更真實紀錄長片","stage":"lanbaoshi","day":1,"start":"19:20","end":"21:20","spotifyId":"2rqNUPgkBgbhcRabUQ5C9g"},{"id":"d1-070","artist":"共振效應","stage":"qingchun","day":1,"start":"13:20","end":"14:00","spotifyId":"6NqHU787X96L2d3ItfceoM"},{"id":"d1-072","artist":"帕崎拉","stage":"qingchun","day":1,"start":"14:40","end":"15:20","spotifyId":"5nXlEFPq9PX2TJjNA6ZgbW"},{"id":"d1-074","artist":"MOTIF HIVE","stage":"qingchun","day":1,"start":"16:00","end":"16:40","spotifyId":"0TzZGtByDjlFroO4ZX5WnK"},{"id":"d1-076","artist":"震樂堂","stage":"qingchun","day":1,"start":"17:20","end":"18:00","spotifyId":"7JdvpeT6SiyVpfQDp9QmBi"},{"id":"d1-077","artist":"庵心自在所","stage":"qingchun","day":1,"start":"18:40","end":"19:20","spotifyId":"2seNyxWz5SOuYTmhxetJjJ"},{"id":"d1-080","artist":"DJ N.OERS","stage":"xiaogang","day":1,"start":"15:00","end":"16:10"},{"id":"d1-081","artist":"DJ GAN3DA","stage":"xiaogang","day":1,"start":"16:10","end":"17:20"},{"id":"d1-082","artist":"DJ GTER","stage":"xiaogang","day":1,"start":"17:20","end":"18:40"},{"id":"d1-083","artist":"DJ YU","stage":"xiaogang","day":1,"start":"18:40","end":"19:50"},{"id":"d1-084","artist":"DJ DINDIN","stage":"xiaogang","day":1,"start":"19:50","end":"21:00"},{"id":"d1-085","artist":"Brain Youth","stage":"dashu","day":1,"start":"15:00","end":"15:30"},{"id":"d1-086","artist":"Slow Roast 慢熟·Debby Wang 王思雅｜林映辰｜郝東東","stage":"dashu","day":1,"start":"15:30","end":"16:20"},{"id":"d1-087","artist":"Brain Youth","stage":"dashu","day":1,"start":"16:30","end":"17:00"},{"id":"d1-088","artist":"Mr. Kloud","stage":"dashu","day":1,"start":"17:00","end":"18:00"},{"id":"d1-089","artist":"DJ ChiLL","stage":"dashu","day":1,"start":"18:00","end":"19:00"},{"id":"d1-090","artist":"巧連智｜巧虎的港邊大冒險","stage":"kids","day":1,"start":"16:40","end":"17:40","timeNote":"預計"},{"id":"d2-001","artist":"結束バンド [JP]","stage":"nanba","day":2,"start":"12:30","end":"13:10","spotifyId":"2nvl0N9GwyX69RRBMEZ4OD"},{"id":"d2-002","artist":"芒果醬","stage":"nanba","day":2,"start":"14:10","end":"14:50","spotifyId":"1t1GIb4bb1lARAXwWEekUN"},{"id":"d2-003","artist":"康士坦的變化球","stage":"nanba","day":2,"start":"15:50","end":"16:30","spotifyId":"4fmdz90I7bCk35iK6GZ9fK"},{"id":"d2-004","artist":"怕胖團 ft. 陽帆","stage":"nanba","day":2,"start":"17:30","end":"18:10","spotifyId":"0jz8mea3EKbqvOxZY6skBz"},{"id":"d2-005","artist":"拍謝少年 ft. AYUNi D from PEDRO","stage":"nanba","day":2,"start":"19:10","end":"19:50","spotifyId":"6c4IBMTcnFDhsKHXNSBBvp"},{"id":"d2-006","artist":"落日飛車","stage":"nanba","day":2,"start":"21:10","end":"21:50","spotifyId":"7BqRcZsHYYQeqMAOp7e532"},{"id":"d2-010","artist":"EmptyORio","stage":"hailong","day":2,"start":"13:20","end":"14:00","spotifyId":"5XuYYh7VssmjmETxEBUF2M"},{"id":"d2-012","artist":"ゲシュタルト乙女 urban session ft. yurinasia","stage":"hailong","day":2,"start":"14:40","end":"15:20","spotifyId":"7gBefUcQxW9DQljFrjOFwL"},{"id":"d2-014","artist":"隨性 ft. 婷文","stage":"hailong","day":2,"start":"16:00","end":"16:40","spotifyId":"49HrBvSTA170eDdlemSH62"},{"id":"d2-016","artist":"NOVELISTS [FR]","stage":"hailong","day":2,"start":"17:20","end":"18:00","spotifyId":"6o8sDniHcZPM1SixvjKiYS"},{"id":"d2-018","artist":"巨大的轟鳴","stage":"hailong","day":2,"start":"18:40","end":"19:20","spotifyId":"1eIwDRL56k56ZlGNcIvMz8"},{"id":"d2-020","artist":"Hiromi's Sonicwonder [JP·US·FR]","stage":"hailong","day":2,"start":"20:10","end":"21:10","spotifyId":"7DeuppKQdCVhuWrzzCBBpc"},{"id":"d2-030","artist":"HUSH","stage":"nvshen","day":2,"start":"12:40","end":"13:20","spotifyId":"5Mx85GBWB3PbMOhZAVxXkR"},{"id":"d2-011","artist":"TOOBOE [JP]","stage":"nvshen","day":2,"start":"14:00","end":"14:40","spotifyId":"0HZLpOSMHpalBlUnONhynN"},{"id":"d2-013","artist":"Gummy B × 陳嫺靜","stage":"nvshen","day":2,"start":"15:20","end":"16:00","spotifyId":"041GibkKYtPdNlIAqxs1gs"},{"id":"d2-015","artist":"當代電影大師","stage":"nvshen","day":2,"start":"16:40","end":"17:20","spotifyId":"1Zho9gJQQCYaLYKkmWp337"},{"id":"d2-017","artist":"鄭宜農","stage":"nvshen","day":2,"start":"18:00","end":"18:40","spotifyId":"0mVEQWHpQc30NdVqwtj8WJ"},{"id":"d2-019","artist":"BAND-MAID [JP]","stage":"nvshen","day":2,"start":"19:30","end":"20:10","spotifyId":"5Wh3G01Xfxn2zzEZNpuYHH"},{"id":"d2-021","artist":"AiNA THE END [JP]","stage":"nvshen","day":2,"start":"21:00","end":"21:40","spotifyId":"5k7KS34gxQbzdQaXWSOVKC"},{"id":"d2-031","artist":"黃宇寒","stage":"haibo","day":2,"start":"13:10","end":"13:50","spotifyId":"58na39JAZ12nojYGPuqdWg"},{"id":"d2-032","artist":"KINAKO＆東京中央線","stage":"haibo","day":2,"start":"14:30","end":"15:10","spotifyId":"3V08ccY0aRSWTljOTqut9O"},{"id":"d2-034","artist":"多米多羅 ft. 可凡","stage":"haibo","day":2,"start":"15:50","end":"16:30"},{"id":"d2-036","artist":"FunkyMo ft. 小尾巴","stage":"haibo","day":2,"start":"17:10","end":"17:50","spotifyId":"4qYwZQPZRdnMnjnlXWM19A"},{"id":"d2-037","artist":"粉紅噪音","stage":"haibo","day":2,"start":"18:30","end":"19:10","spotifyId":"6KqJmhq0XyOpT4LOyd5qxK"},{"id":"d2-038","artist":"派對超人 羅百吉 ft. 寶貝｜謝明諺｜C.Holly｜潤少｜LilHAO","stage":"haibo","day":2,"start":"20:10","end":"21:40","spotifyId":"3oWRSLMFA2FrRJJoIajSQF"},{"id":"d2-040","artist":"TSS [FR]","stage":"kamome","day":2,"start":"13:10","end":"13:50","spotifyId":"0hTsRy6iJPc0fgkxhEHzmT"},{"id":"d2-033","artist":"恆月三途","stage":"kamome","day":2,"start":"14:50","end":"15:30","spotifyId":"0BeS0OZOWqc3LmKedIh9vP"},{"id":"d2-035","artist":"五月五日 [KR]","stage":"kamome","day":2,"start":"16:30","end":"17:10","spotifyId":"59THIwTnvgT7SeGFzocky2"},{"id":"d2-045","artist":"Infernal Chaos","stage":"kamome","day":2,"start":"18:10","end":"18:50","spotifyId":"7vmFTSdU7nsz7m7dItytcd"},{"id":"d2-046","artist":"忘憂水","stage":"kamome","day":2,"start":"19:50","end":"20:30","spotifyId":"6hwGNRMHwuw0jJxLV6UBzA"},{"id":"d2-041","artist":"畫室","stage":"chutou","day":2,"start":"13:40","end":"14:20","spotifyId":"1B7Kl4sj7umXtT5FYsvtNU"},{"id":"d2-042","artist":"薄荷葉 ft. JB","stage":"chutou","day":2,"start":"15:00","end":"15:40","spotifyId":"60rRASfjRQDHGKsnmef9oN"},{"id":"d2-043","artist":"馬尾 ft. 立長","stage":"chutou","day":2,"start":"16:20","end":"17:00"},{"id":"d2-044","artist":"洪安妮","stage":"chutou","day":2,"start":"17:40","end":"18:20","spotifyId":"3ZlBKjbfPWDT0RUWTpWzwv"},{"id":"d2-050","artist":"陪呱吉放歌 vol.1 呱吉｜迪拉｜李毅誠","stage":"daxiong","day":2,"start":"13:00","end":"14:00"},{"id":"d2-051","artist":"丸長世代 柯家洋｜阿舌","stage":"daxiong","day":2,"start":"15:00","end":"16:00"},{"id":"d2-053","artist":"還有夜間限定 小堯｜阿賢","stage":"daxiong","day":2,"start":"17:00","end":"18:00"},{"id":"d2-060","artist":"LEIGHT NINE","stage":"lanbaoshi","day":2,"start":"14:00","end":"14:40"},{"id":"d2-062","artist":"破地獄","stage":"lanbaoshi","day":2,"start":"15:20","end":"16:00","spotifyId":"4rgGqYYp43VQDKdRHnDrgw"},{"id":"d2-052","artist":"喜劇開港 單口喜劇","stage":"lanbaoshi","day":2,"start":"16:40","end":"17:20"},{"id":"d2-054","artist":"Plutato","stage":"lanbaoshi","day":2,"start":"18:00","end":"18:40","spotifyId":"3A3zuAop7uM5dY6Vs41dsR"},{"id":"d2-070","artist":"打倒三明治","stage":"qingchun","day":2,"start":"13:20","end":"14:00","spotifyId":"50FEJC364l9cY3wTRZQ8I8"},{"id":"d2-061","artist":"壓滿俱樂部","stage":"qingchun","day":2,"start":"14:40","end":"15:20"},{"id":"d2-063","artist":"沈默紳士","stage":"qingchun","day":2,"start":"16:00","end":"16:40","spotifyId":"0GV5nHc17AGtGu5Z0dG2hi"},{"id":"d2-064","artist":"debloop","stage":"qingchun","day":2,"start":"17:20","end":"18:00","spotifyId":"0xOOE7MZvWploulCZXFnQR"},{"id":"d2-065","artist":"貓膽汁","stage":"qingchun","day":2,"start":"18:40","end":"19:20","spotifyId":"3jB1rrv3m8Uass8V0WBjX4"},{"id":"d2-072","artist":"DJ QuestionMark 英語金曲復興運動","stage":"xiaogang","day":2,"start":"15:00","end":"16:20"},{"id":"d2-073","artist":"DCIV + Lazy Habits","stage":"xiaogang","day":2,"start":"16:20","end":"17:00"},{"id":"d2-074","artist":"Flowstrong + Dac","stage":"xiaogang","day":2,"start":"17:00","end":"17:40","spotifyId":"3KgKUvLzPtJSiXz0WC71YH"},{"id":"d2-075","artist":"BRADD + 阿法","stage":"xiaogang","day":2,"start":"17:40","end":"18:20"},{"id":"d2-076","artist":"That's my shhh","stage":"xiaogang","day":2,"start":"18:20","end":"19:40","spotifyId":"5iUU1iEJjzYNmZv8l2rMVp"},{"id":"d2-077","artist":"DJ 賴皮 MR.SKIN 國語作業簿","stage":"xiaogang","day":2,"start":"19:40","end":"21:00"},{"id":"d2-078","artist":"蘇俊穎 掌中木偶劇團","stage":"dashu","day":2,"start":"15:00","end":"16:00"},{"id":"d2-079","artist":"DJ Hunter","stage":"dashu","day":2,"start":"16:00","end":"17:00"},{"id":"d2-080","artist":"DJ ChiLL","stage":"dashu","day":2,"start":"17:00","end":"18:00"},{"id":"d2-081","artist":"DJ Litro ft. 大樹下練歌坊","stage":"dashu","day":2,"start":"18:00","end":"19:00"},{"id":"d2-082","artist":"巧連智｜巧虎的港邊大冒險","stage":"kids","day":2,"start":"16:40","end":"17:40","timeNote":"預計"}];
+
+const STAGES = [
+  {id:"nanba",   name:"南霸天",      color:"#6AB344"},
+  {id:"hailong", name:"海龍王",      color:"#7B3FA0"},
+  {id:"nvshen",  name:"女神龍",      color:"#C7237A"},
+  {id:"haibo",   name:"海波浪",      color:"#1DA0E5"},
+  {id:"kamome",  name:"卡魔麥",      color:"#E07B7B"},
+  {id:"chutou",  name:"出頭天",      color:"#D98A15"},
+  {id:"daxiong", name:"大雄丸",      color:"#C44D4D"},
+  {id:"lanbaoshi",name:"藍寶石",     color:"#1A3FC7"},
+  {id:"qingchun",name:"青春夢",      color:"#F0C830"},
+  {id:"xiaogang",name:"小港祭",      color:"#B8896B"},
+  {id:"dashu",   name:"大樹下",      color:"#4E8B3F"},
+  {id:"kids",    name:"KIDS 親子區", color:"#FF6B6B"},
+];
+
+// Travel time matrix (minutes) — derived from venue map in note.js
+// Default 20 min between any two different stages; special pairs override
+const TRAVEL_DIST = {
+  "kamome-qingchun":30,"nanba-qingchun":30,"hailong-kamome":30,
+  "hailong-nanba":30,"kamome-nvshen":30,"nanba-nvshen":30,"kids-qingchun":10,
+};
+const TRAVEL_TIME = (a, b) => {
+  if (a === b) return 0;
+  return TRAVEL_DIST[[a,b].sort().join("-")] ?? 20;
+};
+
+// ══════════════════════════════════════
+// Firebase setup
+// ══════════════════════════════════════
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, remove, onValue, get }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const isConfigured = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY";
+
+let db = null;
+let prefUnsubscribe = null;
+
+if (isConfigured) {
+  const app = initializeApp(FIREBASE_CONFIG);
+  db = getDatabase(app);
+} else {
+  document.getElementById("firebase-notice").style.display = "block";
+}
+
+// ══════════════════════════════════════
+// State
+// ══════════════════════════════════════
+let currentName = localStorage.getItem("megaport_name") || "";
+let allPrefs = {}; // { name: { id: "must"/"want" } }
+const stageMap = Object.fromEntries(STAGES.map(s => [s.id, s]));
+const scheduleMap = Object.fromEntries(SCHEDULE.map(s => [s.id, s]));
+
+// ══════════════════════════════════════
+// Utilities
+// ══════════════════════════════════════
+function timeToMin(t) {
+  const [h, m] = t.split(":").map(Number);
+  return h * 60 + m;
+}
+
+function showToast(msg, ms = 1800) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), ms);
+}
+
+function stageColor(stageId) {
+  return stageMap[stageId]?.color ?? "#888";
+}
+function stageName(stageId) {
+  return stageMap[stageId]?.name ?? stageId;
+}
+
+// ══════════════════════════════════════
+// Firebase listeners & writers
+// ══════════════════════════════════════
+function subscribePrefs(callback) {
+  if (!db) {
+    callback({});
+    return;
+  }
+  const r = ref(db, "preferences");
+  return onValue(r, snap => {
+    callback(snap.val() ?? {});
+  });
+}
+
+async function writePref(name, id, value) {
+  if (!db) { showToast("⚠️ 尚未設定 Firebase"); return; }
+  const r = ref(db, `preferences/${name}/${id}`);
+  if (value === null) {
+    await remove(r);
+  } else {
+    await set(r, value);
+  }
+}
+
+// ══════════════════════════════════════
+// Page navigation
+// ══════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+window.goHome = () => showPage("page-home");
+
+window.goToSelect = () => {
+  const name = document.getElementById("name-input").value.trim();
+  if (!name) { showToast("請先輸入你的名字"); return; }
+  currentName = name;
+  localStorage.setItem("megaport_name", name);
+  document.getElementById("select-subtitle").textContent = `${name} 的喜好`;
+  renderSelectPage();
+  showPage("page-select");
+};
+
+window.goToSchedule = () => {
+  showPage("page-schedule");
+};
+
+// ══════════════════════════════════════
+// Tab switching
+// ══════════════════════════════════════
+window.switchSelectDay = (day, btn) => {
+  btn.closest(".tabs").querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll("#page-select .day-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById(`select-day${day}`).classList.add("active");
+};
+
+window.switchSchedDay = (day, btn) => {
+  document.querySelectorAll("#page-schedule .tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".schedule-day-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById(`schedule-day${day}`).classList.add("active");
+};
+
+// ══════════════════════════════════════
+// SELECT PAGE — stage-grouped list
+// ══════════════════════════════════════
+function renderSelectPage() {
+  for (const day of [1, 2]) {
+    const container = document.getElementById(`select-day${day}`);
+    const dayItems = SCHEDULE.filter(s => s.day === day);
+    let html = '';
+    for (const stage of STAGES) {
+      const items = dayItems.filter(s => s.stage === stage.id)
+        .sort((a, b) => timeToMin(a.start) - timeToMin(b.start));
+      if (!items.length) continue;
+      html += `<div class="stage-section">`;
+      html += `<div class="stage-section-hdr" style="background:${stage.color}">`;
+      html += `${esc(stage.name)}</div>`;
+      for (const item of items) {
+        const pref = allPrefs[currentName]?.[item.id] ?? null;
+        const rowCls = pref === 'must' ? 'stage-item sel-must'
+                     : pref === 'want' ? 'stage-item sel-want' : 'stage-item';
+        const mustCls = pref === 'must' ? 'pref-btn must-active' : 'pref-btn';
+        const wantCls = pref === 'want' ? 'pref-btn want-active' : 'pref-btn';
+        const spotifyBtn = item.spotifyId
+          ? `<a class="spotify-btn" href="https://open.spotify.com/artist/${item.spotifyId}" target="_blank" title="在 Spotify 試聽">♫</a>`
+          : `<span style="width:26px;flex-shrink:0"></span>`;
+        html += `<div id="srow-${item.id}" class="${rowCls}">
+          <div class="item-time">${item.start}–${item.end}</div>
+          <div class="item-name">${esc(item.artist)}</div>
+          <div class="item-actions">
+            ${spotifyBtn}
+            <button class="${mustCls}" onclick="togglePref('${item.id}','must')">必聽</button>
+            <button class="${wantCls}" onclick="togglePref('${item.id}','want')">想聽</button>
+          </div>
+        </div>`;
+      }
+      html += `</div>`; // stage-section
+    }
+    container.innerHTML = html;
+  }
+}
+
+window.togglePref = async (id, value) => {
+  if (!currentName) { showToast("請先輸入名字"); return; }
+  if (!allPrefs[currentName]) allPrefs[currentName] = {};
+  const prev = allPrefs[currentName][id];
+  const next = prev === value ? null : value;
+  if (next === null) delete allPrefs[currentName][id];
+  else allPrefs[currentName][id] = next;
+
+  // Update this row in-place
+  const row = document.getElementById(`srow-${id}`);
+  if (row) {
+    row.className = next === 'must' ? 'stage-item sel-must'
+                  : next === 'want' ? 'stage-item sel-want' : 'stage-item';
+    const [mustBtn, wantBtn] = row.querySelectorAll('.pref-btn');
+    mustBtn.className = next === 'must' ? 'pref-btn must-active' : 'pref-btn';
+    wantBtn.className = next === 'want' ? 'pref-btn want-active' : 'pref-btn';
+  }
+  const label = next === 'must' ? '❤️ 必聽' : next === 'want' ? '⭐ 想聽' : '取消';
+  showToast(`${label}  ${scheduleMap[id].artist}`);
+  await writePref(currentName, id, next);
+};
+
+// ══════════════════════════════════════
+// TIMELINE helpers (shared by schedule)
+// ══════════════════════════════════════
+const TL_SLOT   = 2;   // px per minute
+const TL_COL_W  = 68;  // px per stage column
+const TL_TIME_W = 42;  // px for time label column
+const TL_BASE   = 12 * 60 + 30; // 12:30
+
+// ══════════════════════════════════════
+// SCHEDULE PAGE rendering
+// ══════════════════════════════════════
+function renderSchedulePage(prefs) {
+  allPrefs = prefs;
+  const names = Object.keys(prefs);
+  const personsEl = document.getElementById("schedule-persons");
+  personsEl.innerHTML = names.length
+    ? names.map(n => `<span class="person-pill">${esc(n)}</span>`).join("")
+    : "<span style='color:#666'>尚無人填寫</span>";
+  for (const day of [1, 2]) renderScheduleDay(day, prefs);
+}
+
+function renderScheduleDay(day, prefs) {
+  const container = document.getElementById(`schedule-day${day}`);
+  const names = Object.keys(prefs).filter(name =>
+    SCHEDULE.some(item => item.day === day && prefs[name][item.id])
+  );
+
+  // Sub-tab structure
+  let html = `<div class="sub-tabs">
+    <button class="sub-tab-btn active" onclick="switchSubTab(${day},'integrated',this)">整合時間表</button>
+    <button class="sub-tab-btn" onclick="switchSubTab(${day},'personal',this)">個人流程</button>
+  </div>`;
+
+  html += `<div id="sub-integrated-${day}" class="sub-panel active">${buildIntegratedTimelineHTML(day, prefs)}</div>`;
+  html += `<div id="sub-personal-${day}" class="sub-panel">${buildPersonFlowHTML(day, prefs, names)}</div>`;
+  container.innerHTML = html;
+}
+
+window.switchSubTab = (day, tab, btn) => {
+  const panel = document.getElementById(`schedule-day${day}`);
+  panel.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  panel.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`sub-${tab}-${day}`).classList.add('active');
+};
+
+window.switchPersonTab = (day, idx, btn) => {
+  const panel = document.getElementById(`sub-personal-${day}`);
+  panel.querySelectorAll('.person-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  panel.querySelectorAll('.person-flow-panel').forEach(p => p.classList.remove('active'));
+  panel.querySelectorAll('.person-flow-panel')[idx].classList.add('active');
+};
+
+// ── 整合時間表: ALL blocks shown, unselected = dimmed ──
+function buildIntegratedTimelineHTML(day, prefs) {
+  const dayItems = SCHEDULE.filter(s => s.day === day);
+  const allMins  = dayItems.flatMap(s => [timeToMin(s.start), timeToMin(s.end)]);
+  const topMin   = Math.max(...allMins);
+  const totalH   = (topMin - TL_BASE) * TL_SLOT;
+  const totalW   = TL_TIME_W + TL_COL_W * STAGES.length;
+
+  let html = `<div class="ptl-legend">
+    <span class="ptl-legend-item"><span class="ptl-legend-swatch must"></span>必聽</span>
+    <span class="ptl-legend-item"><span class="ptl-legend-swatch want"></span>想聽</span>
+    <span class="ptl-legend-item"><span class="ptl-legend-swatch dim"></span>無人選擇</span>
+  </div>`;
+  html += `<div class="sched-outer" style="min-width:${totalW}px">`;
+  html += `<div class="tl-header-row"><div class="tl-time-th" style="width:${TL_TIME_W}px"></div>`;
+  for (const stage of STAGES) {
+    html += `<div class="tl-col-header" style="width:${TL_COL_W}px;background:${stage.color}">${esc(stage.name)}</div>`;
+  }
+  html += `</div><div class="tl-body" style="height:${totalH}px">`;
+
+  for (let m = TL_BASE; m <= topMin; m += 30) {
+    const top = (m - TL_BASE) * TL_SLOT, isHour = m % 60 === 0;
+    const label = `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+    html += `<div class="tl-gridline${isHour?' hour':''}" style="top:${top}px;left:${TL_TIME_W}px"></div>`;
+    html += `<div class="tl-time-label" style="top:${top}px">${label}</div>`;
+  }
+
+  STAGES.forEach((stage, si) => {
+    const left = TL_TIME_W + si * TL_COL_W;
+    dayItems.filter(s => s.stage === stage.id).forEach(item => {
+      const voters  = Object.entries(prefs).filter(([, p]) => p[item.id]);
+      const top     = (timeToMin(item.start) - TL_BASE) * TL_SLOT;
+      const height  = (timeToMin(item.end) - timeToMin(item.start)) * TL_SLOT;
+      const isLit   = voters.length > 0;
+      const bg = isLit ? stage.color : 'rgba(255,255,255,0.04)';
+      const border  = isLit ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.07)';
+      const personTags = voters.map(([name, p]) => {
+        const cls = p[item.id] === 'must' ? 'must' : 'want';
+        return `<span class="tl-person-dot ${cls}">${esc(name.slice(0,2))}</span>`;
+      }).join('');
+      html += `<div class="tl-block"
+        style="left:${left+1}px;top:${top+1}px;width:${TL_COL_W-2}px;height:${height-2}px;background:${bg};border-color:${border}"
+        title="${esc(item.artist)}\n${item.start}–${item.end}${voters.length?'\n'+voters.map(([n,p])=>n+':'+p[item.id]).join(', '):''}">
+        <div class="tl-block-inner">
+          <div class="tl-block-name" style="${isLit?'':'color:rgba(255,255,255,0.2)'}">${esc(item.artist)}</div>
+          ${isLit ? `<div class="tl-block-persons">${personTags}</div>` : ''}
+        </div>
+      </div>`;
+    });
+  });
+  html += `</div></div>`;
+  return html;
+}
+
+// ── 個人流程: person sub-tabs + personal timeline ──
+function buildPersonFlowHTML(day, prefs, names) {
+  if (!names.length) return `<div class="schedule-empty">尚無人填寫喜好</div>`;
+
+  let html = `<div class="person-tabs">`;
+  names.forEach((name, i) => {
+    html += `<button class="person-tab-btn${i===0?' active':''}" onclick="switchPersonTab(${day},${i},this)">${esc(name)}</button>`;
+  });
+  html += `</div>`;
+
+  names.forEach((name, i) => {
+    html += `<div class="person-flow-panel${i===0?' active':''}">`;
+    html += buildPersonalTimelineHTML(day, name, prefs);
+    html += `</div>`;
+  });
+  return html;
+}
+
+function buildPersonalTimelineHTML(day, name, prefs) {
+  const p = prefs[name] ?? {};
+  const dayItems = SCHEDULE.filter(s => s.day === day);
+  const myShows = dayItems.filter(item => p[item.id])
+    .sort((a, b) => timeToMin(a.start) - timeToMin(b.start));
+
+  if (!myShows.length) {
+    return `<div class="schedule-empty" style="padding:40px">${esc(name)} 尚未勾選任何節目</div>`;
+  }
+
+  // Only show columns for stages this person selected — keeps grid compact
+  const myStageIds = [...new Set(myShows.map(s => s.stage))];
+  const myStages   = STAGES.filter(s => myStageIds.includes(s.id));
+  const INTEGRATED_W = TL_TIME_W + TL_COL_W * STAGES.length; // same as integrated view
+  const PTL_COL_W  = Math.floor((INTEGRATED_W - TL_TIME_W) / myStages.length);
+
+  const allMins = dayItems.flatMap(s => [timeToMin(s.start), timeToMin(s.end)]);
+  const topMin  = Math.max(...allMins);
+  const totalH  = (topMin - TL_BASE) * TL_SLOT;
+  const totalW  = INTEGRATED_W;
+
+  // Pre-compute transitions
+  const trans = myShows.map((item, idx) => {
+    if (idx === myShows.length - 1) return null;
+    const next         = myShows[idx + 1];
+    const gap          = timeToMin(next.start) - timeToMin(item.end);
+    const travel       = TRAVEL_TIME(item.stage, next.stage);
+    const rest         = gap - travel;
+    const isRealConflict = gap < 0;          // shows actually overlap
+    const isEarlyLeave   = gap >= 0 && gap < travel; // not enough travel time
+    return { gap, travel, rest, next, isRealConflict, isEarlyLeave };
+  });
+
+  const LEGEND_PERSONAL = `<div class="ptl-legend">
+    <span class="ptl-legend-item"><span class="ptl-legend-swatch must"></span>必聽（深色）</span>
+    <span class="ptl-legend-item"><span class="ptl-legend-swatch want"></span>想聽（淡色）</span>
+    <span class="ptl-legend-divider"></span>
+    <span class="ptl-legend-item"><span class="ptl-legend-bar conflict"></span>時間衝突</span>
+    <span class="ptl-legend-item"><span class="ptl-legend-bar earlyleave"></span>要早走</span>
+    <span class="ptl-legend-item"><span class="ptl-legend-bar zero"></span>剛好趕到</span>
+    <span class="ptl-legend-item"><span class="ptl-legend-bar tight"></span>餘裕緊張</span>
+    <span class="ptl-legend-item"><span class="ptl-legend-bar ok"></span>時間充裕</span>
+  </div>`;
+
+  let html = LEGEND_PERSONAL;
+  html += `<div class="sched-outer" style="min-width:${totalW}px">`;
+  html += `<div class="tl-header-row"><div class="tl-time-th" style="width:${TL_TIME_W}px"></div>`;
+  for (const stage of myStages) {
+    html += `<div class="tl-col-header" style="width:${PTL_COL_W}px;background:${stage.color}">${esc(stage.name)}</div>`;
+  }
+  html += `</div><div class="tl-body" style="height:${totalH}px">`;
+
+  // Gridlines
+  for (let m = TL_BASE; m <= topMin; m += 30) {
+    const top = (m - TL_BASE) * TL_SLOT, isHour = m % 60 === 0;
+    const label = `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+    html += `<div class="tl-gridline${isHour?' hour':''}" style="top:${top}px;left:${TL_TIME_W}px"></div>`;
+    html += `<div class="tl-time-label" style="top:${top}px">${label}</div>`;
+  }
+
+  myShows.forEach((item, idx) => {
+    const si     = myStages.findIndex(s => s.id === item.stage);
+    const left   = TL_TIME_W + si * PTL_COL_W;
+    const top    = (timeToMin(item.start) - TL_BASE) * TL_SLOT;
+    const height = (timeToMin(item.end) - timeToMin(item.start)) * TL_SLOT;
+    const pref   = p[item.id];
+    const color  = stageColor(item.stage);
+    const tOut   = trans[idx];
+    const tIn    = idx > 0 ? trans[idx - 1] : null;
+    const hasRealConflict = (tIn?.isRealConflict) || (tOut?.isRealConflict);
+    const hasEarlyLeave   = !hasRealConflict && ((tIn?.isEarlyLeave) || (tOut?.isEarlyLeave));
+
+    // Companions
+    const companions = Object.entries(prefs)
+      .filter(([n, op]) => n !== name && op[item.id]);
+    const companionDots = companions.map(([cn, op]) => {
+      const cls = op[item.id] === 'must' ? 'must' : 'want';
+      return `<span class="tl-person-dot ${cls}">${esc(cn.slice(0, 2))}</span>`;
+    }).join('');
+
+    const prefCls   = pref === 'must' ? 'tl-must' : 'tl-want';
+    const prefLabel = pref === 'must' ? '必聽' : '想聽';
+    const conflictCls = hasRealConflict ? 'ptl-conflict-block'
+                      : hasEarlyLeave   ? 'ptl-earlyleave-block'
+                      : '';
+    const hasConflict = hasRealConflict || hasEarlyLeave;
+
+    html += `<div class="tl-block ${prefCls} ${conflictCls}"
+      style="left:${left+1}px;top:${top+1}px;width:${PTL_COL_W-2}px;height:${height-2}px;background:${color}">
+      <div class="tl-block-inner">
+        <div class="tl-block-name">${esc(item.artist)}</div>
+        ${companionDots ? `<div class="tl-block-persons" style="margin-top:2px">${companionDots}</div>` : ''}
+      </div>
+    </div>`;
+
+    // Travel indicator below this show
+    if (tOut) {
+      const { gap, travel, rest, next, isRealConflict, isEarlyLeave } = tOut;
+      let travelTop = (timeToMin(item.end) - TL_BASE) * TL_SLOT;
+      let travelH   = Math.max(travel * TL_SLOT, 36);
+      const nextSn    = stageName(next.stage);
+      const sameStage = item.stage === next.stage;
+      let extraStyle  = ""; // 新增一個變數來存放衝突時需要的額外 CSS 屬性
+
+      let bg, borderLeft, l1, l2;
+      if (isRealConflict) {// Shows actually overlap in time
+        travelTop = (timeToMin(next.start) - TL_BASE) * TL_SLOT;
+        travelH = (-gap) * TL_SLOT;
+        if (travelH < 36) travelH = 36;
+        
+        // ✨ 改用「近乎純白/微紅」的實心底色（0.96 不透明度），直接把下方的顏色蓋掉
+        bg = 'rgba(255, 248, 248, 0.96)'; 
+        borderLeft = '4px solid #ff2200';
+        l1 = '⚠ 時間衝突'; l2 = `重疊 ${-gap} 分鐘`;
+        
+        // ✨ 加上頂部的紅色虛線，營造「從這裡開始被切斷/重疊」的視覺感
+        extraStyle = 'z-index: 10; border-top: 2px dashed #ff2200; box-shadow: 0 -3px 8px rgba(0,0,0,0.08);';
+      } else if (isEarlyLeave) {
+        // Gap exists but not enough to travel
+        bg = 'rgba(255,136,0,0.15)'; borderLeft = '4px solid #ff8800';
+        l1 = '⚠ 要早走'; l2 = `需 ${travel} 分，只有 ${gap} 分`;
+      } else if (sameStage) {
+        bg = 'rgba(200,200,220,0.85)'; borderLeft = `4px solid ${color}`;
+        l1 = '同場地'; l2 = `休息 ${rest} 分`;
+      } else if (rest === 0) {
+        bg = 'rgba(255,136,0,0.2)'; borderLeft = '4px solid #ff8800';
+        l1 = `→ ${nextSn}`; l2 = `換場 ${travel} 分，剛好趕到`;
+      } else if (rest < 10) {
+        bg = 'rgba(200,160,0,0.2)'; borderLeft = '4px solid #c09000';
+        l1 = `→ ${nextSn}`; l2 = `換場 ${travel} 分，剩 ${rest} 分`;
+      } else {
+        bg = 'rgba(40,160,80,0.18)'; borderLeft = '4px solid #28a050';
+        l1 = `→ ${nextSn}`; l2 = `換場 ${travel} 分，休息 ${rest} 分`;
+      }
+
+      const isMustMust = pref === 'must' && p[tOut.next.id] === 'must';
+      // ✨ 在 style 裡面加上 ${extraStyle}
+      html += `<div class="ptl-travel${isMustMust ? '' : ' ptl-muted'}"
+        style="left:${left+1}px;top:${travelTop}px;width:${PTL_COL_W-2}px;height:${travelH}px;background:${bg};border-left:${borderLeft};${extraStyle}">
+        <div class="ptl-travel-l1">${esc(l1)}</div>
+        <div class="ptl-travel-l2">${esc(l2)}</div>
+      </div>`;
+    }
+
+      
+  });
+
+  html += `</div></div>`;
+  return html;
+}
+
+// ══════════════════════════════════════
+// HOME PAGE — participants count & chips
+// ══════════════════════════════════════
+function updateHomeParticipants(prefs) {
+  const names = Object.keys(prefs);
+  const info = document.getElementById("participants-info");
+  if (!isConfigured) {
+    info.textContent = "（Firebase 未設定，離線模式）";
+    return;
+  }
+  info.innerHTML = names.length
+    ? `已有 <strong>${names.length}</strong> 人填寫喜好`
+    : "還沒有人填寫";
+
+  const chips = document.getElementById("name-chips");
+  chips.innerHTML = names.map(n =>
+    `<span class="name-chip" onclick="selectName('${esc(n)}')">${esc(n)}</span>`
+  ).join("");
+}
+
+window.selectName = (name) => {
+  document.getElementById("name-input").value = name;
+  currentName = name;
+  localStorage.setItem("megaport_name", name);
+};
+
+// ══════════════════════════════════════
+// Init
+// ══════════════════════════════════════
+function esc(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+// Restore name from localStorage
+if (currentName) {
+  document.getElementById("name-input").value = currentName;
+}
+
+// Subscribe to Firebase (all pages share the same live data)
+const unsub = subscribePrefs(prefs => {
+  allPrefs = prefs;
+  updateHomeParticipants(prefs);
+  renderSelectPage(); // refresh selection states
+  renderSchedulePage(prefs);
+});
+
+</script>
+</body>
+</html>
