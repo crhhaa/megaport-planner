@@ -247,6 +247,7 @@
     pointer-events: none;
   }
   .tl-gridline.hour { background: rgba(0,0,0,0.12); }
+  .tl-gridline.ten { background: rgba(0,0,0,0.025); }
   .tl-time-label {
     position: absolute;
     left: 0;
@@ -937,6 +938,12 @@ function buildIntegratedTimelineHTML(day, prefs) {
   }
   html += `</div><div class="tl-body" style="height:${totalH}px">`;
 
+  for (let m = TL_BASE; m <= topMin; m += 10) {
+    if (m % 30 !== 0) {
+      const top = (m - TL_BASE) * TL_SLOT;
+      html += `<div class="tl-gridline ten" style="top:${top}px;left:${TL_TIME_W}px"></div>`;
+    }
+  }
   for (let m = TL_BASE; m <= topMin; m += 30) {
     const top = (m - TL_BASE) * TL_SLOT, isHour = m % 60 === 0;
     const label = `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
@@ -1043,6 +1050,12 @@ function buildPersonalTimelineHTML(day, name, prefs) {
   html += `</div><div class="tl-body" style="height:${totalH}px">`;
 
   // Gridlines
+  for (let m = TL_BASE; m <= topMin; m += 10) {
+    if (m % 30 !== 0) {
+      const top = (m - TL_BASE) * PTL_SLOT;
+      html += `<div class="tl-gridline ten" style="top:${top}px;left:${TL_TIME_W}px"></div>`;
+    }
+  }
   for (let m = TL_BASE; m <= topMin; m += 30) {
     const top = (m - TL_BASE) * PTL_SLOT, isHour = m % 60 === 0;
     const label = `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
