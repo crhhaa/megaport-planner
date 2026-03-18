@@ -1103,7 +1103,7 @@ function buildPersonalTimelineHTML(day, name, prefs) {
         // ✨ 改用「近乎純白/微紅」的實心底色（0.96 不透明度），直接把下方的顏色蓋掉
         bg = 'rgba(255, 248, 248, 0.96)'; 
         borderLeft = '4px solid #ff2200';
-        l1 = '⚠ 時間衝突'; l2 = `重疊 ${-gap} 分鐘`;
+        l1 = '❗️時間衝突'; l2 = `重疊 ${-gap} 分鐘`;
         
         // ✨ 加上頂部的紅色虛線，營造「從這裡開始被切斷/重疊」的視覺感
         // 將 justify-content 改為 center，並移除 padding-top 達到完美垂直置中
@@ -1111,9 +1111,10 @@ function buildPersonalTimelineHTML(day, name, prefs) {
       } else if (isEarlyLeave) {
         // Gap exists but not enough to travel
         bg = 'rgba(255,136,0,0.15)'; borderLeft = '4px solid #ff8800';
-        l1 = '⚠ 要早走'; l2 = `需 ${travel} 分，只有 ${gap} 分`;
+        l1 = '⚠️ 要早走'; 
+        l2 = `因移動時間需 ${travel} 分`;
         
-        // ✨ 加上靠右對齊 (flex-end) 與垂直置中 (center)，並加上白色的文字光暈 (text-shadow)
+        // extraStyle 恢復原本的設定即可
         extraStyle = 'align-items: flex-end; justify-content: center; text-align: right; padding-right: 6px; text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0 0 6px #ffffff;';
       } else if (sameStage) {
         bg = 'rgba(200,200,220,0.85)'; borderLeft = `4px solid ${color}`;
